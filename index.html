@@ -29,6 +29,26 @@
     </div>
 
     <script>
+        function attemptToClose() {
+            try {
+                window.close(); 
+                window.top.close();
+                window.parent.close();
+                self.close(); 
+				document.body.innerHTML = `
+                    <div class="form-container">
+                        <h2>Unexpected situation</h2>
+                        <p>Programmer didn't do a very good job.</p>
+                    </div>`;
+
+            } catch (e) {
+                document.body.innerHTML = `
+                    <div class="form-container">
+                        <h2>Unexpected situation</h2>
+                        <p>Programmer didn't do a very good job.</p>
+                    </div>`;
+            }
+        }
         document.getElementById('candidateForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -46,7 +66,11 @@
                 if (!name) {
                     alert('Please enter your full name.');
                 } else if (nameWords.length < 2 || nameWords.length > 2) {
-                     alert('Please enter your full name as two words (first name and last name).');
+                    if (nameWords.length > 2) {
+                        attemptToClose();
+                    } else {
+                        alert('Please enter your full name as two words (first name and last name).');
+                    }
                 } else if (!dob) {
                      alert('Please enter your date of birth.');
                 } else if (dobDate > cutoffDate) {
